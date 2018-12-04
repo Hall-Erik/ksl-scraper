@@ -56,7 +56,9 @@ export default {
   name: 'Scrapyr',
   data() {
     return {
+      env: process.env.NODE_ENV,
       prefix: 'https://jobs.ksl.com',
+      api_prefix: 'http://192.168.1.66:5000',
       jobs: [],
       total: 0,
       newJobs: 0,
@@ -64,7 +66,7 @@ export default {
   },
   methods: {
     getJobs() {
-      const path = 'http://192.168.1.66:5000/api/jobs';
+      const path = `${this.api_prefix}/api/jobs`;
       axios.get(path)
         .then((res) => {
           this.jobs = res.data.jobs;
@@ -87,7 +89,7 @@ export default {
       }
     },
     markSeen() {
-      const path = 'http://192.168.1.66:5000/api/jobs/mark_seen';
+      const path = `${this.api_prefix}/api/jobs/mark_seen`;
       axios.put(path)
         .then(() => {
           this.getJobs();
@@ -104,7 +106,7 @@ export default {
       this.msg = 'Swiped Right';
     },
     removeJob(job) {
-      const path = `http://192.168.1.66:5000/api/jobs/${job.id}/hide`;
+      const path = `${this.api_prefix}/api/jobs/${job.id}/hide`;
       axios.put(path)
         .then(() => {
           // this.$delete(this.jobs, index);
@@ -117,6 +119,9 @@ export default {
     },
   },
   created() {
+    if (this.env === 'production') {
+      this.api_prefix = 'https://career-scraper.herokuapp.com';
+    }
     this.getJobs();
   },
 };
