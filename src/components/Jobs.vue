@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    <hexagon v-if='loading' class="loader"></hexagon>
     <h1>Jobs from KSL</h1>
     <p v-if="newJobs > 0" class="mb-2">
       Showing {{ jobs.length }} of {{ total }} jobs. ({{ newJobs }} new)
@@ -51,9 +52,13 @@
 
 <script>
 import axios from 'axios';
+import {Hexagon} from 'vue-loading-spinner';
 
 export default {
   name: 'Scrapyr',
+  components: {
+    Hexagon
+  },
   data() {
     return {
       env: process.env.NODE_ENV,
@@ -62,16 +67,19 @@ export default {
       jobs: [],
       total: 0,
       newJobs: 0,
+      loading: true,
     };
   },
   methods: {
     getJobs() {
+      this.loading = true;
       const path = `${this.api_prefix}/api/jobs`;
       axios.get(path)
         .then((res) => {
           this.jobs = res.data.jobs;
           this.total = res.data.total;
           this.countNew();
+          this.loading = false;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -130,5 +138,11 @@ export default {
 <style scoped>
     .new {
         background-color: lightgreen;
+    }
+    .loader {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin: auto;
     }
 </style>
