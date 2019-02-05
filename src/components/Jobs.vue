@@ -52,18 +52,19 @@
 
 <script>
 import axios from 'axios';
-import {Hexagon} from 'vue-loading-spinner';
+import { Hexagon } from 'vue-loading-spinner';
 
 export default {
   name: 'Scrapyr',
   components: {
-    Hexagon
+    Hexagon,
   },
   data() {
     return {
       env: process.env.NODE_ENV,
       prefix: 'https://jobs.ksl.com',
-      api_prefix: 'http://192.168.1.66:5000',
+      api_prefix: 'https://career-scraper.herokuapp.com',
+      // api_prefix: 'http://localhost:5000',
       jobs: [],
       total: 0,
       newJobs: 0,
@@ -127,9 +128,6 @@ export default {
     },
   },
   created() {
-    if (this.env === 'production') {
-      this.api_prefix = 'https://career-scraper.herokuapp.com';
-    }
     this.getJobs();
   },
 };
