@@ -1,21 +1,7 @@
-# client
+# KSL Scraper Client
 
-> A Vue.js project
+This is the client to an app that collects job postings from a local newspaper and displays them in a more convenient format.
 
-## Build Setup
+The backend repository can be found [here](http://placeholder.com).
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+The BeautifulSoup script for scraping job listings is [here](http://placeholder.com)
