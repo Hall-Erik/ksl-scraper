@@ -64,7 +64,6 @@ export default {
       env: process.env.NODE_ENV,
       prefix: 'https://jobs.ksl.com',
       api_prefix: 'https://career-scraper.herokuapp.com',
-      // api_prefix: 'http://localhost:5000',
       jobs: [],
       total: 0,
       newJobs: 0,
@@ -128,6 +127,9 @@ export default {
     },
   },
   created() {
+    if (window.location.hostname === 'localhost') {
+      this.api_prefix = 'http://localhost:5000';
+    }
     this.getJobs();
   },
 };
@@ -138,9 +140,10 @@ export default {
         background-color: lightgreen;
     }
     .loader {
-      position: fixed;
+      position: absolute;
       top: 50%;
       left: 50%;
-      margin: auto;
+      margin-left: -20px;
+      margin-top: -20px;
     }
 </style>
