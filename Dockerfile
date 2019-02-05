@@ -1,18 +1,22 @@
-FROM node:7.10.0
-# use changes to package.json to force Docker not to use the cache
-# when we change our application's nodejs dependencies:
-ADD package.json /tmp/package.json
-RUN cd /tmp && yarn install
-RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app
-# From here we load our application's code in, therefore the previous docker
-# "layer" thats been cached will be used if possible
-WORKDIR /usr/src/app
-ADD . /usr/src/app
+FROM node:lts-alpine
+
+# install simple http server for serving static content
+RUN npm install -g http-server
+
+# make the 'app' folder the current working directory
+WORKDIR /app
+
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
+
+# install project dependencies
+RUN npm install
+
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY . .
+
+# build app for production with minification
 RUN npm run build
-RUN rm -rf ./build
-RUN rm -rf ./test
-RUN rm -rf ./src
-ENV PORT=8080
+
 EXPOSE 8080
-CMD [ "npm", "start" ]
-# CMD [ "npm", "run", "dev" ]
+CMD [ "http-server", "dist" ]
