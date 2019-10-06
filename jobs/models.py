@@ -9,11 +9,16 @@ class Job(models.Model):
     date_posted = models.CharField(max_length=10)
 
 
-class SeenJobs(models.Model):
+class SeenJob(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class HiddenJobs(models.Model):
+class HiddenJob(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class SearchPattern(models.Model):
+    pattern = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
