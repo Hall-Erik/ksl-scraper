@@ -8,6 +8,9 @@ class Job(models.Model):
     url = models.CharField(max_length=300, unique=True, db_index=True)
     date_posted = models.CharField(max_length=10)
 
+    class Meta:
+        ordering = ['-date_posted', 'employer', 'name']
+
 
 class SeenJob(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
