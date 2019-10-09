@@ -103,7 +103,7 @@ class HideJobViewTests(TestCase):
     def test_anon_cannot_access(self):
         '''Must be logged in'''
         url = reverse('jobs:hide-job', kwargs={'id': 17})
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_can_hide_jobs(self):
@@ -143,7 +143,7 @@ class HideJobViewTests(TestCase):
 class MarkSeenViewTests(TestCase):
     def test_anon_cannot_access(self):
         '''Must be logged in'''
-        response = self.client.get(reverse('jobs:mark-seen'))
+        response = self.client.post(reverse('jobs:mark-seen'))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_can_mark_seen(self):
@@ -163,3 +163,143 @@ class MarkSeenViewTests(TestCase):
         response = client.post(reverse('jobs:mark-seen'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(user.seenjob_set.count(), 1)
+
+
+class UpdateJobListViewTests(TestCase):
+    def test_anon_cannot_access(self):
+        '''Must be logged in'''
+        response = self.client.post(reverse('jobs:update-jobs'))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_user_can_add_jobs(self):
+        '''Logged in user can POST jobs'''
+        user = User.objects.create_user(
+            username='test',
+            email='test@example.com',
+            password='test123')
+        data = {
+            'jobs':
+            [
+                {
+                    'name': 'tester',
+                    'employer': 'testCorp',
+                    'url': 'example.com/2',
+                    'date_posted': '2019-10-09'
+                },
+                {
+                    'name': 'coder',
+                    'employer': 'testCorp',
+                    'url': 'example.com/1',
+                    'date_posted': '2019-10-10'
+                }
+            ]
+        }
+        self.assertEqual(Job.objects.count(), 0)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(
+            reverse('jobs:update-jobs'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Job.objects.count(), 2)
+
+    def test_user_can_update_jobs(self):
+        '''Logged in user can POST job updates'''
+        user = User.objects.create_user(
+            username='test',
+            email='test@example.com',
+            password='test123')
+        Job.objects.create(
+            name='blah',
+            employer='blahblah',
+            url='example.com/3',
+            date_posted='2019.09.09')
+        data = {
+            'jobs':
+            [
+                {
+                    'name': 'coder',
+                    'employer': 'testCorp',
+                    'url': 'example.com/3',
+                    'date_posted': '2019-10-10'
+                }
+            ]
+        }
+        self.assertEqual(Job.objects.count(), 1)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(
+            reverse('jobs:update-jobs'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Job.objects.count(), 1)
+        self.assertEqual(Job.objects.get().name, 'coder')
+        self.assertEqual(Job.objects.get().employer, 'testCorp')
+        self.assertEqual(Job.objects.get().date_posted, '2019-10-10')
+
+    def test_old_jobs_get_deleted(self):
+        '''Jobs missing from POST data are deleted'''
+        user = User.objects.create_user(
+            username='test',
+            email='test@example.com',
+            password='test123')
+        Job.objects.create(
+            name='blah',
+            employer='blahblah',
+            url='example.com/3',
+            date_posted='2019.09.09')
+        self.assertEqual(Job.objects.count(), 1)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(
+            reverse('jobs:update-jobs'), {'jobs': []}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Job.objects.count(), 0)
+
+    def test_create_update_and_delete(self):
+        '''Jobs can be created, updated, and deleted in on POST'''
+        user = User.objects.create_user(
+            username='test',
+            email='test@example.com',
+            password='test123')
+        Job.objects.create(
+            name='blah',
+            employer='blahblah',
+            url='example.com/2',
+            date_posted='2019.09.09')
+        Job.objects.create(
+            name='blah',
+            employer='blahblah',
+            url='example.com/3',
+            date_posted='2019.09.09')
+        data = {
+            'jobs':
+            [
+                {
+                    'name': 'tester',
+                    'employer': 'testCorp',
+                    'url': 'example.com/2',
+                    'date_posted': '2019-10-09'
+                },
+                {
+                    'name': 'coder',
+                    'employer': 'testCorp',
+                    'url': 'example.com/1',
+                    'date_posted': '2019-10-10'
+                }
+            ]
+        }
+        self.assertEqual(Job.objects.count(), 2)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(
+            reverse('jobs:update-jobs'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Job.objects.count(), 2)
+        self.assertEqual(
+            Job.objects.filter(url='example.com/1').count(), 1)
+        self.assertEqual(
+            Job.objects.filter(url='example.com/2').count(), 1)
+        self.assertEqual(
+            Job.objects.filter(url='example.com/3').count(), 0)
+        self.assertEqual(
+            Job.objects.filter(url='example.com/2').get().name,
+            'tester')
