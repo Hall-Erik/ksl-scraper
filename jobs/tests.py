@@ -138,3 +138,28 @@ class HideJobViewTests(TestCase):
         response = client.post(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(user.hiddenjob_set.count(), 0)
+
+
+class MarkSeenViewTests(TestCase):
+    def test_anon_cannot_access(self):
+        '''Must be logged in'''
+        response = self.client.get(reverse('jobs:mark-seen'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_user_can_mark_seen(self):
+        '''Logged in user can mark jobs as seen'''
+        Job.objects.create(
+            name='Test Tech',
+            employer='TestCorp',
+            url='http://careers.example.com/1',
+            date_posted='2019-10-08')
+        user = User.objects.create_user(
+            username='test',
+            email='test@example.com',
+            password='test123')
+        self.assertEqual(user.seenjob_set.count(), 0)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(reverse('jobs:mark-seen'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(user.seenjob_set.count(), 1)

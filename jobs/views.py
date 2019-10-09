@@ -3,7 +3,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Job
+from .models import Job, SeenJob
 from .serializers import JobListSerializer
 
 
@@ -14,8 +14,7 @@ class JobListView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Job.objects.exclude(
-            id__in=user.hiddenjob_set.all().values_list(
-                'id', flat=True))
+            id__in=user.hiddenjob_set.all().values_list('id', flat=True))
 
 
 class AllJobsListView(ListAPIView):
@@ -39,4 +38,16 @@ class HideJobView(APIView):
         if id not in user.hiddenjob_set.all().values_list(
           'id', flat=True):
             user.hiddenjob_set.create(job=job)
+        return Response('success')
+
+
+class MarkSeenView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        user = request.user
+        new_jobs = Job.objects.exclude(
+            id__in=user.seenjob_set.all().values_list('id', flat=True))
+        SeenJob.objects.bulk_create([
+            SeenJob(user=user, job=job) for job in new_jobs])
         return Response('success')
