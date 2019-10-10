@@ -1,13 +1,19 @@
 from django.http import Http404
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    AllowAny)
 from rest_framework.authentication import (
     TokenAuthentication,
     SessionAuthentication)
-from .models import Job, SeenJob
-from .serializers import JobListSerializer, JobCreateSerializer
+from .models import Job, SeenJob, SearchPattern
+from .serializers import (
+    JobListSerializer,
+    JobCreateSerializer,
+    SearchPatternSerializer)
 
 
 class JobListView(ListAPIView):
@@ -56,7 +62,7 @@ class MarkSeenView(APIView):
         return Response('success')
 
 
-class UpdateJobList(APIView):
+class UpdateJobListView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication, SessionAuthentication)
 
@@ -88,3 +94,9 @@ class UpdateJobList(APIView):
                 serializer.save()
 
         return Response('success')
+
+
+class SearchPatternListView(ListCreateAPIView):
+    queryset = SearchPattern.objects.all()
+    serializer_class = SearchPatternSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)

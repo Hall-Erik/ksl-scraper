@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from .models import Job
-from .serializers import JobListSerializer
+from .models import Job, SearchPattern
+from .serializers import JobListSerializer, SearchPatternSerializer
 from django.contrib.auth.models import User
 
 
@@ -303,3 +303,31 @@ class UpdateJobListViewTests(TestCase):
         self.assertEqual(
             Job.objects.filter(url='example.com/2').get().name,
             'tester')
+
+
+class SearchPatternListCreateViewTests(TestCase):
+    def test_anon_can_get(self):
+        '''Anyone can GET'''
+        pattern = SearchPattern.objects.create(
+            pattern='software-engineer')
+        serializer = SearchPatternSerializer(pattern)
+        response = self.client.get(reverse('jobs:search'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(serializer.data, response.data)
+
+    def test_anon_cannot_post(self):
+        '''Must be logged in to POST'''
+        response = self.client.post(reverse('jobs:search'), {
+            'pattern': 'software-engineer'})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_user_can_post(self):
+        '''Logged in user can save search patterns'''
+        user = User.objects.create_user(username='test')
+        client = APIClient()
+        client.force_authenticate(user=user)
+        self.assertEqual(SearchPattern.objects.count(), 0)
+        response = client.post(reverse('jobs:search'), {
+            'pattern': 'software-engineer'})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(SearchPattern.objects.count(), 1)

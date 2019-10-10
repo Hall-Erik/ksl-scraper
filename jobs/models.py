@@ -23,5 +23,4 @@ class HiddenJob(models.Model):
 
 
 class SearchPattern(models.Model):
-    pattern = models.CharField(max_length=200)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pattern = models.CharField(max_length=200, unique=True)
