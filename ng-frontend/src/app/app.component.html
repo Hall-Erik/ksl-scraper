@@ -1,21 +1,26 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>KSL Jobs</span>
+    <span class="spacer"></span>
+    <button mat-button (click)="openRegisterDialog()">Register</button>
+    <button mat-button (click)="openLoginDialog()">Login</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div>
+  <h1>Something</h1>
+  <p>
+    Lorem ipsum dolor amet pBR&B schlitz chia knausgaard. Selvage williamsburg green juice knausgaard. Shaman kogi bespoke trust fund tattooed, cloud bread lumbersexual tumblr kombucha post-ironic. Glossier chambray squid kale chips. Small batch tofu you probably haven't heard of them, cardigan cornhole lomo squid portland.
+  </p>
+  <p>
+    Quinoa pop-up normcore banh mi leggings, photo booth green juice put a bird on it. Pok pok four loko neutra keffiyeh, affogato VHS leggings. Small batch +1 cold-pressed shabby chic, cred 3 wolf moon taiyaki farm-to-table fanny pack shoreditch copper mug etsy. Kinfolk poutine jianbing, butcher subway tile pinterest waistcoat hoodie iPhone vaporware health goth banh mi food truck flexitarian.
+  </p>
+    90's cardigan vexillologist, freegan whatever beard schlitz humblebrag stumptown. Semiotics fingerstache wayfarers beard godard. IPhone skateboard +1, vinyl hell of normcore yuccie kinfolk pug af small batch. Etsy VHS post-ironic, salvia lo-fi kitsch vaporware 8-bit lyft. Tattooed you probably haven't heard of them typewriter truffaut williamsburg. Chillwave vinyl cardigan, kitsch photo booth tumblr shaman tilde cliche offal crucifix authentic four dollar toast 3 wolf moon. Microdosing knausgaard craft beer flannel selfies iceland deep v.
+  <p>
+    Salvia 90's hammock, vexillologist williamsburg direct trade lumbersexual gluten-free vinyl. Banjo cornhole wayfarers williamsburg mumblecore. Affogato shaman twee, yr echo park enamel pin etsy. Skateboard yr trust fund, hella swag actually poke.
+  </p>
+  <p>
+    Subway tile hexagon DIY four loko pinterest. Post-ironic ethical poutine gentrify brunch ugh helvetica microdosing. Scenester four dollar toast everyday carry, ugh poke farm-to-table flexitarian mustache squid chicharrones godard YOLO hell of. Gentrify scenester tattooed edison bulb, hashtag tumeric asymmetrical hella. Small batch squid offal 90's try-hard jianbing. Put a bird on it blog semiotics, hoodie four dollar toast ramps keytar lyft messenger bag gentrify franzen crucifix mumblecore air plant kickstarter. Wayfarers vexillologist thundercats ethical air plant ennui.
+  </p>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
 <router-outlet></router-outlet>
