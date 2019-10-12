@@ -331,3 +331,15 @@ class SearchPatternListCreateViewTests(TestCase):
             'pattern': 'software-engineer'})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(SearchPattern.objects.count(), 1)
+
+    def test_no_duplicates_allowed(self):
+        '''Can't save the same search pattern twice'''
+        SearchPattern.objects.create(pattern='software-engineer')
+        user = User.objects.create_user(username='test')
+        client = APIClient()
+        client.force_authenticate(user=user)
+        self.assertEqual(SearchPattern.objects.count(), 1)
+        response = client.post(reverse('jobs:search'), {
+            'pattern': 'software-engineer'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(SearchPattern.objects.count(), 1)
