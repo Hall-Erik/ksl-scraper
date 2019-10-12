@@ -1,0 +1,52 @@
+<h1 mat-dialog-title>Register</h1>
+<form [formGroup]="registerForm">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput
+      placeholder="Username"
+      formControlName="username" required>
+      <mat-error *ngIf="username.hasError('required')">
+        Username is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+      placeholder="Email"
+      formControlName="email" required>
+      <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="email.hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+      placeholder="Password"
+      formControlName="password1"
+      type="password"
+      required>
+      <mat-error *ngIf="password1.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+      placeholder="Confirm Password"
+      formControlName="password2"
+      type="password"
+      required>
+      <mat-error *ngIf="password2.hasError('required')">
+        Confirm Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button
+    [disabled]="registerForm.invalid"
+    color="primary"
+    (click)="onClick()"
+    cdkFocusInitial>Register</button>
+    <button mat-button color="warn" (click)="onNoClick()">Cancel</button>
+  </div>
+  </form>

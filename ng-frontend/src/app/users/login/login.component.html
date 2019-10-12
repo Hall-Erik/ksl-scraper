@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Log In</h1>
+<form [formGroup]="loginForm">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput
+      formControlName="username" required>
+      <mat-error *ngIf="username.hasError('required')">
+        Username is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+      formControlName="password"
+      type="password"
+      required>
+      <mat-error *ngIf="username.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button color="primary" (click)="onClick()" cdkFocusInitial>Ok</button>
+    <button mat-button color="warn" (click)="onNoClick()">No Thanks</button>
+  </div>
+  </form>
