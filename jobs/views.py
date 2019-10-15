@@ -19,6 +19,7 @@ from .serializers import (
 class JobListView(ListAPIView):
     serializer_class = JobListSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         user = self.request.user
@@ -67,14 +68,10 @@ class UpdateJobListView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
 
     def post(self, request):
-        posted_jobs = request.data.get('jobs')
-        url_jobs = {}
-        for job in posted_jobs:
-            url_jobs[job['url']] = job
-
+        url_jobs = request.data
         # Delete jobs that were not included
         Job.objects.exclude(
-            url__in=[job['url'] for job in posted_jobs]).delete()
+            url__in=[job for job in url_jobs.keys()]).delete()
         # Check existing jobs for updates
         db_jobs = Job.objects.all()
         for job in db_jobs:
