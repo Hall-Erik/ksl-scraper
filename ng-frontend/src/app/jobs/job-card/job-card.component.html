@@ -1,0 +1,14 @@
+<mat-card class="job-card">
+  <mat-card-header>
+    <mat-card-title>{{job.name}}</mat-card-title>
+    <mat-card-subtitle>{{job.employer}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{job.date_posted}}</p>
+    <p><a href="{{job.url}}">Visit</a></p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>Visit</button>
+    <button mat-button>Hide</button>
+  </mat-card-actions>
+</mat-card>

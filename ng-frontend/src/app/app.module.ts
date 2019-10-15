@@ -12,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card'; 
 
 import { ApiInterceptor } from './services/api.interceptor';
 
@@ -21,12 +22,14 @@ import { UserService } from './services/user.service';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
+import { JobCardComponent } from './jobs/job-card/job-card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    JobCardComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +41,7 @@ import { RegisterComponent } from './users/register/register.component';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCardModule,
     ReactiveFormsModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
