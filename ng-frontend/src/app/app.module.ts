@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 import { ApiInterceptor } from './services/api.interceptor';
 
@@ -44,6 +45,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
     MatInputModule,
     MatCardModule,
     MatGridListModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({

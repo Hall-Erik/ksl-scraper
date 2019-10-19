@@ -25,11 +25,13 @@ export class AppComponent implements OnInit {
     private userService: UserService) {}
 
   ngOnInit() {
-    this.jobService.get_all_jobs().subscribe(jobs => {
-      this.jobs = jobs;
-    });
+    
     this.userService.user.subscribe(user => this.user = user);
-    this.userService.get_user().subscribe();
+    this.userService.get_user().subscribe(() => {
+      this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
+    }, () => {
+      this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+    });
   }
 
   openLoginDialog(): void {
@@ -39,7 +41,9 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.userService.get_user().subscribe();
+      this.userService.get_user().subscribe(() => {
+        this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
+      });
     });
   }
 
@@ -56,6 +60,9 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.userService.logout().subscribe(
-      () => this.userService.user.next(null));
+      () => {
+        this.userService.user.next(null);
+        this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+      });
   }
 }

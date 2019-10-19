@@ -11,6 +11,10 @@ export class JobService {
 
   constructor(private http: HttpClient) { }
 
+  public get_jobs(): Observable<Job[]> {
+    return this.http.get<Job[]>('/api/jobs/');
+  }
+
   public get_all_jobs(): Observable<Job[]> {
     return this.http.get<Job[]>('/api/jobs/all/');
   }

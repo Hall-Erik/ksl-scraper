@@ -7,6 +7,7 @@
     <button *ngIf="user" mat-button (click)="logout()">Logout {{user.username}}</button>
   </mat-toolbar-row>
 </mat-toolbar>
+<mat-spinner *ngIf="!jobs" class="spinner"></mat-spinner>
 <div *ngIf="jobs">
   <app-job-card *ngFor="let job of jobs" [job]="job"></app-job-card>
 </div>
