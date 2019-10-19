@@ -2,13 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
-export interface RegisterData {
-  username: string;
-  email: string;
-  password1: string;
-  password2: string;
-}
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -34,8 +27,8 @@ export class RegisterComponent {
     onClick(): void {
       if(this.registerForm.valid) {
         console.log('registerd.');
+        this.dialogRef.close();
       }
-      this.dialogRef.close();
     }
 
     onNoClick(): void {

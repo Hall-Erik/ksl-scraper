@@ -3,6 +3,7 @@
   <div mat-dialog-content>
     <mat-form-field>
       <input matInput
+      placeholder="Username"
       formControlName="username" required>
       <mat-error *ngIf="username.hasError('required')">
         Username is <strong>required</strong>
@@ -10,10 +11,11 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput
+      placeholder="Password"
       formControlName="password"
       type="password"
       required>
-      <mat-error *ngIf="username.hasError('required')">
+      <mat-error *ngIf="password.hasError('required')">
         Password is <strong>required</strong>
       </mat-error>
     </mat-form-field>

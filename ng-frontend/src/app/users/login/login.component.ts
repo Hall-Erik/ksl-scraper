@@ -2,11 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
-export interface LoginData {
-  username: string;
-  password: string;
-}
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,14 +13,17 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
 
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
+
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
     private fb: FormBuilder) { }
 
     onClick(): void {
-      this.dialogRef.close();
       if(this.loginForm.valid) {
         console.log('logged in.');
+        this.dialogRef.close();
       }
     }
 
