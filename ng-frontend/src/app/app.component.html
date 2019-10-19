@@ -2,8 +2,9 @@
   <mat-toolbar-row>
     <span>KSL Jobs</span>
     <span class="spacer"></span>
-    <button mat-button (click)="openRegisterDialog()">Register</button>
-    <button mat-button (click)="openLoginDialog()">Login</button>
+    <button *ngIf="!user" mat-button (click)="openRegisterDialog()">Register</button>
+    <button *ngIf="!user" mat-button (click)="openLoginDialog()">Login</button>
+    <button *ngIf="user" mat-button (click)="logout()">Logout {{user.username}}</button>
   </mat-toolbar-row>
 </mat-toolbar>
 <div *ngIf="jobs">

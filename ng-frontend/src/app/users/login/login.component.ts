@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
+import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,12 +20,19 @@ export class LoginComponent {
 
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private userService: UserService) { }
 
     onClick(): void {
       if(this.loginForm.valid) {
-        console.log('logged in.');
-        this.dialogRef.close();
+        this.userService.login(
+          this.username.value,
+          this.password.value
+        ).subscribe(() => {
+          this.dialogRef.close();
+        }, (err) => {
+          console.log(err);
+        });
       }
     }
 

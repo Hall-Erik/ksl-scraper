@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { User } from '../models/user';
 
@@ -8,6 +9,7 @@ import { User } from '../models/user';
   providedIn: 'root'
 })
 export class UserService {
+  public user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) { }
 
@@ -33,7 +35,15 @@ export class UserService {
   }
 
   public get_user(): Observable<User> {
-    return this.http.get<User>('/api/auth/user/');
+    return this.http.get<User>('/api/auth/user/').pipe(
+      map((user: User) => {
+        this.user.next(user);
+        return user;
+      }, () => {
+        this.user.next(null);
+        return null;
+      })
+    );
   }
 
   public logout(): Observable<any> {

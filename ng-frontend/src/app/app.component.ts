@@ -5,7 +5,10 @@ import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
 
 import { JobService } from './services/job.service';
+import { UserService } from './services/user.service';
+
 import { Job } from './models/job';
+import { User } from './models/user';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +17,19 @@ import { Job } from './models/job';
 })
 export class AppComponent implements OnInit {
   public jobs: Job[];
+  public user: User;
 
   constructor(
     public dialog: MatDialog,
-    private jobService: JobService) {}
+    private jobService: JobService,
+    private userService: UserService) {}
 
   ngOnInit() {
     this.jobService.get_all_jobs().subscribe(jobs => {
       this.jobs = jobs;
     });
+    this.userService.user.subscribe(user => this.user = user);
+    this.userService.get_user().subscribe();
   }
 
   openLoginDialog(): void {
@@ -31,8 +38,8 @@ export class AppComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      
+    dialogRef.afterClosed().subscribe(() => {
+      this.userService.get_user().subscribe();
     });
   }
 
@@ -45,5 +52,10 @@ export class AppComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       
     });
+  }
+
+  logout(): void {
+    this.userService.logout().subscribe(
+      () => this.userService.user.next(null));
   }
 }
