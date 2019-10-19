@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'; 
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { ApiInterceptor } from './services/api.interceptor';
 
@@ -42,6 +43,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatGridListModule,
     ReactiveFormsModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
