@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
+import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -22,17 +24,20 @@ export class RegisterComponent {
 
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private userService: UserService) { }
 
     onClick(): void {
       if(this.registerForm.valid) {
-        console.log('registerd.');
-        this.dialogRef.close();
+        this.userService.register(
+          this.username.value,
+          this.email.value,
+          this.password1.value,
+          this.password2.value).subscribe(() => {
+            this.dialogRef.close();
+          });
       }
     }
 
-    onNoClick(): void {
-      console.log('cancelled.');
-      this.dialogRef.close();
-    }
+    onNoClick(): void { this.dialogRef.close(); }
 }

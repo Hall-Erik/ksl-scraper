@@ -36,8 +36,5 @@ export class LoginComponent {
       }
     }
 
-    onNoClick(): void {
-      console.log('cancelled.');
-      this.dialogRef.close();
-    }
+    onNoClick(): void { this.dialogRef.close(); }
 }
