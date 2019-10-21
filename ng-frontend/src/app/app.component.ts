@@ -24,13 +24,19 @@ export class AppComponent implements OnInit {
     private jobService: JobService,
     private userService: UserService) {}
 
-  ngOnInit() {
-    
+  ngOnInit() {    
     this.userService.user.subscribe(user => this.user = user);
     this.userService.get_user().subscribe(() => {
       this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
     }, () => {
       this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+    });
+  }
+
+  hideJob(job_id: number) {
+    this.jobService.hide_job(job_id.toString())
+    .subscribe(() => {
+      this.jobs = this.jobs.filter(j => j.id != job_id);
     });
   }
 

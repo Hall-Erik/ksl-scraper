@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Job } from '../../models/job';
 
@@ -9,7 +9,9 @@ import { Job } from '../../models/job';
 })
 export class JobCardComponent {
   @Input() job: Job;
+  @Output() hideJob: EventEmitter<number> = new EventEmitter();
 
   constructor() { }
 
+  onHide() { this.hideJob.emit(this.job.id); }
 }

@@ -8,6 +8,7 @@
   <mat-card-actions>
     <a mat-stroked-button color="primary" target="_blank"
     href="https://jobs.ksl.com{{job.url}}">Visit</a>
-    <button mat-stroked-button color="warn">Hide</button>
+    <button mat-stroked-button
+    (click)="onHide()" color="warn">Hide</button>
   </mat-card-actions>
 </mat-card>

@@ -9,7 +9,8 @@
 </mat-toolbar>
 <mat-spinner *ngIf="!jobs" class="spinner"></mat-spinner>
 <div *ngIf="jobs">
-  <app-job-card *ngFor="let job of jobs" [job]="job"></app-job-card>
+  <app-job-card *ngFor="let job of jobs"
+  (hideJob)="hideJob($event)" [job]="job"></app-job-card>
 </div>
 
 <router-outlet></router-outlet>

@@ -24,7 +24,7 @@ class JobListView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Job.objects.exclude(
-            id__in=user.hiddenjob_set.all().values_list('id', flat=True))
+            id__in=user.hiddenjob_set.all().values_list('job_id', flat=True))
 
 
 class AllJobsListView(ListAPIView):
@@ -46,7 +46,7 @@ class HideJobView(APIView):
         user = request.user
         job = self.get_object(id)
         if id not in user.hiddenjob_set.all().values_list(
-          'id', flat=True):
+          'job_id', flat=True):
             user.hiddenjob_set.create(job=job)
         return Response('success')
 
