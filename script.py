@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+
 class Scraper:
     '''
     Class for scraping data and updating DB
@@ -28,13 +29,13 @@ class Scraper:
             "software-engineer",
             "software-developer",
             "python"]
-        self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}  # noqa: E501
         self.backend_url = 'http://localhost:8000/api/jobs/update/'
         self.auth = {'Authorization': os.environ.get('BACKEND_TOKEN')}
         # self.backend_url = 'https://ksl-jobs.herokuapp.com/api/jobs/update/'
         self.jobs = {}
         self.page = 1
-       
+
     def get_jobs(self, url):
         print(f'Fetching {url}...')
         data = requests.get(url, headers=self.headers)
@@ -57,7 +58,7 @@ class Scraper:
         # Get employer names
         for employer in soup.find_all('span', {'class': 'company-name'}):
             employers.append(employer.text.strip())
-        
+
         # Get posting dates
         for date in soup.find_all('span', {'class': 'posted-time'}):
             d = datetime.strptime(date.text.strip(), 'Posted %b %d, %Y')
@@ -65,7 +66,9 @@ class Scraper:
             dates.append(d)
 
         # Test that array sizes match
-        if len(names) == len(urls) and len(urls) == len(employers) and len(employers) == len(dates):
+        if len(names) == len(urls) and \
+           len(urls) == len(employers) and \
+           len(employers) == len(dates):
             for i in range(len(names)):
                 job = {
                     'name': names[i],
@@ -93,6 +96,7 @@ class Scraper:
         print(resp.json())
         print()
 
+
 def its_go_time():
     print(time.strftime("Starting at %A, %d. %B %Y %I:%M:%S %p"))
     s = Scraper()
@@ -101,6 +105,7 @@ def its_go_time():
     print('Posting to backend...')
     s.post_to_backend()
     print()
+
 
 if __name__ == '__main__':
     its_go_time()
