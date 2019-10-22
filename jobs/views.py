@@ -12,6 +12,7 @@ from rest_framework.authentication import (
 from .models import Job, SeenJob, SearchPattern
 from .serializers import (
     JobListSerializer,
+    AllJobListSerializer,
     JobCreateSerializer,
     SearchPatternSerializer)
 
@@ -21,6 +22,10 @@ class JobListView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
+    def get_serializer_context(self):
+        user = self.request.user
+        return { 'user': user }
+
     def get_queryset(self):
         user = self.request.user
         return Job.objects.exclude(
@@ -29,7 +34,7 @@ class JobListView(ListAPIView):
 
 class AllJobsListView(ListAPIView):
     queryset = Job.objects.all()
-    serializer_class = JobListSerializer
+    serializer_class = AllJobListSerializer
     permission_classes = (AllowAny,)
 
 
@@ -48,6 +53,24 @@ class HideJobView(APIView):
         if id not in user.hiddenjob_set.all().values_list(
           'job_id', flat=True):
             user.hiddenjob_set.create(job=job)
+        return Response('success')
+
+
+class MarkJobSeenView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, id):
+        try:
+            return Job.objects.get(id=id)
+        except Job.DoesNotExist:
+            raise Http404
+
+    def post(self, request, id):
+        user = request.user
+        job = self.get_object(id)
+        if id not in user.seenjob_set.all().values_list(
+          'job_id', flat=True):
+            user.seenjob_set.create(job=job)
         return Response('success')
 
 
