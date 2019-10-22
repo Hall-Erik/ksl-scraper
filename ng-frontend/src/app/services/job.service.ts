@@ -24,6 +24,10 @@ export class JobService {
     return this.http.post(`/api/jobs/${job_id}/hide/`, {});
   }
 
+  public mark_job_seen(job_id: string): Observable<any> {
+    return this.http.post(`/api/jobs/${job_id}/mark_seen/`, {});
+  }
+
   public mark_all_seen(): Observable<any> {
     return this.http.post('/api/jobs/mark_seen/', {});
   }

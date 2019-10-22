@@ -4,6 +4,7 @@ export class Job {
     employer: string;
     url: string;
     date_posted: string;
+    seen: boolean;
 
     public constructor(init?: Partial<Job>) {
         Object.assign(this, init);

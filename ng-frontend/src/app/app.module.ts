@@ -15,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon'; 
 
 import { ApiInterceptor } from './services/api.interceptor';
 
@@ -46,6 +48,8 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
     MatCardModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    MatBadgeModule,
+    MatIconModule,
     ReactiveFormsModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
