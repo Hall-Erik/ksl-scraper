@@ -1,111 +1,112 @@
+'''
+Script for scraping data and updating DB
+
+jobs dictionary should look like:
+{
+'/listing/1234': {
+'name': 'job',
+'url': '/listing/1234',
+'employer': 'IRS',
+'date_posted': '2018-11-27',
+},
+...
+}
+'''
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import time
 import os
+import random
 from dotenv import load_dotenv
+
+
 load_dotenv()
+jobs = {}
+searches = [
+    "software-engineer",
+    "software-developer",
+    "python"]
+BACKEND_DOMAIN = os.environ.get('BACKEND_DOMAIN') or 'http://localhost:8000'
+KSL_URL = 'https://jobs.ksl.com/search/keywords/'
 
 
-class Scraper:
-    '''
-    Class for scraping data and updating DB
+def get_jobs(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}  # noqa: E501
+    print(f'Fetching {url}...')
+    data = requests.get(
+        url, headers=headers, verify=False, timeout=20)
+    soup = BeautifulSoup(data.text, 'html.parser')
+    print('Done.')
+    names = []
+    urls = []
+    employers = []
+    dates = []
 
-    jobs dictionary should look like:
-    {
-    '/listing/1234': {
-    'name': 'job',
-    'url': '/listing/1234',
-    'employer': 'IRS',
-    'date_posted': '2018-11-27',
-    },
-    ...
-    }
-    '''
+    # Get name and url from anchor tags.
+    for title in soup.find_all('h2', {'class': 'job-title'}):
+        anchor = title.find('a')
+        names.append(anchor.text.strip())
+        urls.append(anchor.get('href'))
 
-    def __init__(self):
-        self.prefix = 'https://jobs.ksl.com/search/keywords/'
-        self.searches = [
-            "software-engineer",
-            "software-developer",
-            "python"]
-        self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}  # noqa: E501
-        self.backend_url = 'http://localhost:8000/api/jobs/update/'
-        self.auth = {'Authorization': os.environ.get('BACKEND_TOKEN')}
-        # self.backend_url = 'https://ksl-jobs.herokuapp.com/api/jobs/update/'
-        self.jobs = {}
-        self.page = 1
+    # Get employer names
+    for employer in soup.find_all('span', {'class': 'company-name'}):
+        employers.append(employer.text.strip())
 
-    def get_jobs(self, url):
-        print(f'Fetching {url}...')
-        data = requests.get(url, headers=self.headers)
-        soup = BeautifulSoup(data.text, 'html.parser')
-        print('Done.')
-        names = []
-        urls = []
-        employers = []
-        dates = []
+    # Get posting dates
+    for date in soup.find_all('span', {'class': 'posted-time'}):
+        d = datetime.strptime(date.text.strip(), 'Posted %b %d, %Y')
+        d = d.strftime('%Y-%m-%d')
+        dates.append(d)
 
-        # print('Scraping page {}'.format(self.page))
-        self.page += 1
+    # Test that array sizes match
+    if len(names) == len(urls) and \
+        len(urls) == len(employers) and \
+        len(employers) == len(dates):
+        for i in range(len(names)):
+            job = {
+                'name': names[i],
+                'employer': employers[i],
+                'url': urls[i],
+                'date_posted': dates[i],
+            }
+            jobs[urls[i]] = job
 
-        # Get name and url from anchor tags.
-        for title in soup.find_all('h2', {'class': 'job-title'}):
-            anchor = title.find('a')
-            names.append(anchor.text.strip())
-            urls.append(anchor.get('href'))
+    # Now, fint 'next' anchor and rerun.
+    next_page = soup.find('a', {'class': 'next link'})
 
-        # Get employer names
-        for employer in soup.find_all('span', {'class': 'company-name'}):
-            employers.append(employer.text.strip())
+    data.close()
+    time.sleep(random.randint(1, 15))
 
-        # Get posting dates
-        for date in soup.find_all('span', {'class': 'posted-time'}):
-            d = datetime.strptime(date.text.strip(), 'Posted %b %d, %Y')
-            d = d.strftime('%Y-%m-%d')
-            dates.append(d)
+    if next_page is not None:
+        get_jobs(next_page.get('href'))
 
-        # Test that array sizes match
-        if len(names) == len(urls) and \
-           len(urls) == len(employers) and \
-           len(employers) == len(dates):
-            for i in range(len(names)):
-                job = {
-                    'name': names[i],
-                    'employer': employers[i],
-                    'url': urls[i],
-                    'date_posted': dates[i],
-                }
-                self.jobs[urls[i]] = job
 
-        # Now, fint 'next' anchor and rerun.
-        next_page = soup.find('a', {'class': 'next link'})
-
-        if next_page is not None:
-            self.get_jobs(next_page.get('href'))
-
-    def scrape(self):
-        '''Loads jobs into memory'''
-        for search in self.searches:
-            self.get_jobs(self.prefix + search)
-
-    def post_to_backend(self):
+def post_to_backend():
+    login_path = '/api/auth/login/'
+    post_path = '/api/jobs/update/'
+    username = os.environ.get('USER')
+    password = os.environ.get('PASSWORD')
+    auth = {}
+    resp = requests.post(BACKEND_DOMAIN + login_path, json={
+        'username': username,
+        'password': password})
+    data = resp.json()
+    if 'key' in data:
+        auth['Authorization'] = f'Token {data["key"]}'
+        resp.close()
         resp = requests.post(
-            self.backend_url, headers=self.auth, json=self.jobs)
+            BACKEND_DOMAIN + post_path, headers=auth, json=jobs)
         print(resp.status_code)
         print(resp.json())
         print()
 
 
-def its_go_time():
-    print(time.strftime("Starting at %A, %d. %B %Y %I:%M:%S %p"))
-    s = Scraper()
-    print('Scraping pages...')
-    s.scrape()
-    print('Posting to backend...')
-    s.post_to_backend()
-    print()
-
-
 if __name__ == '__main__':
-    its_go_time()
+    print(time.strftime("Starting at %A, %d. %B %Y %I:%M:%S %p"))
+    print('Scraping pages...')
+    for search in searches:
+        get_jobs(KSL_URL + search)
+    print('Posting to backend...')
+    post_to_backend()
+    print()
