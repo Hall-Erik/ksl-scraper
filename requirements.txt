@@ -14,7 +14,7 @@ flake8==3.7.8
 gunicorn==19.9.0
 idna==2.8
 mccabe==0.6.1
-ng2django==0.1.4
+ng2django==19.10.23
 oauthlib==3.1.0
 psycopg2==2.8.3
 pycodestyle==2.5.0
