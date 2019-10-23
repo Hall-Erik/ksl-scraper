@@ -24,7 +24,7 @@ class JobListView(ListAPIView):
 
     def get_serializer_context(self):
         user = self.request.user
-        return { 'user': user }
+        return {'user': user}
 
     def get_queryset(self):
         user = self.request.user

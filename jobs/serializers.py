@@ -4,13 +4,12 @@ from .models import Job, SearchPattern
 
 class JobListSerializer(ModelSerializer):
     seen = SerializerMethodField()
-    
+
     def get_seen(self, obj):
         user = self.context.get('user')
         return (
             obj.id in user.seenjob_set.all().values_list(
                 'job_id', flat=True))
-
 
     class Meta:
         model = Job
