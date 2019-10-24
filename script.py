@@ -61,8 +61,8 @@ def get_jobs(url):
 
     # Test that array sizes match
     if len(names) == len(urls) and \
-        len(urls) == len(employers) and \
-        len(employers) == len(dates):
+       len(urls) == len(employers) and \
+       len(employers) == len(dates):
         for i in range(len(names)):
             job = {
                 'name': names[i],
