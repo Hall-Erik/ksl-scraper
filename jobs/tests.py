@@ -3,7 +3,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from .models import Job, SearchPattern
-from .serializers import JobListSerializer, SearchPatternSerializer
+from .serializers import (
+    AllJobListSerializer,
+    JobListSerializer,
+    SearchPatternSerializer)
 from django.contrib.auth.models import User
 
 
@@ -11,7 +14,7 @@ class JobListViewTests(TestCase):
     def test_must_be_logged_in(self):
         '''Anon user cannot GET this endpoint'''
         response = self.client.get(reverse('jobs:list'))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_can_view_jobs(self):
         '''User can GET a list of jobs'''
@@ -20,11 +23,11 @@ class JobListViewTests(TestCase):
             employer='TestCorp',
             url='http://careers.example.com/1',
             date_posted='2019-10-08')
-        serializer = JobListSerializer(job)
         user = User.objects.create_user(
             username='test',
             email='test@example.com',
             password='test123')
+        serializer = JobListSerializer(job, context={'user': user})
         client = APIClient()
         client.force_authenticate(user=user)
         response = client.get(reverse('jobs:list'))
@@ -39,11 +42,11 @@ class JobListViewTests(TestCase):
             employer='TestCorp',
             url='http://careers.example.com/1',
             date_posted='2019-10-08')
-        serializer = JobListSerializer(job)
         user = User.objects.create_user(
             username='test',
             email='test@example.com',
             password='test123')
+        serializer = JobListSerializer(job, context={'user': user})
         user.hiddenjob_set.create(job_id=job.id)
         client = APIClient()
         client.force_authenticate(user=user)
@@ -66,7 +69,7 @@ class AllJobsListViewTests(TestCase):
             employer='TestCorp',
             url='http://careers.example.com/1',
             date_posted='2019-10-08')
-        serializer = JobListSerializer(job)
+        serializer = AllJobListSerializer(job)
         user = User.objects.create_user(
             username='test',
             email='test@example.com',
@@ -85,7 +88,7 @@ class AllJobsListViewTests(TestCase):
             employer='TestCorp',
             url='http://careers.example.com/1',
             date_posted='2019-10-08')
-        serializer = JobListSerializer(job)
+        serializer = AllJobListSerializer(job)
         user = User.objects.create_user(
             username='test',
             email='test@example.com',
@@ -178,21 +181,18 @@ class UpdateJobListViewTests(TestCase):
             email='test@example.com',
             password='test123')
         data = {
-            'jobs':
-            [
-                {
-                    'name': 'tester',
-                    'employer': 'testCorp',
-                    'url': 'example.com/2',
-                    'date_posted': '2019-10-09'
-                },
-                {
-                    'name': 'coder',
-                    'employer': 'testCorp',
-                    'url': 'example.com/1',
-                    'date_posted': '2019-10-10'
-                }
-            ]
+            'example.com/2': {
+                'name': 'tester',
+                'employer': 'testCorp',
+                'url': 'example.com/2',
+                'date_posted': '2019-10-09'
+            },
+            'example.com/1': {
+                'name': 'coder',
+                'employer': 'testCorp',
+                'url': 'example.com/1',
+                'date_posted': '2019-10-10'
+            }
         }
         self.assertEqual(Job.objects.count(), 0)
         client = APIClient()
@@ -214,15 +214,12 @@ class UpdateJobListViewTests(TestCase):
             url='example.com/3',
             date_posted='2019.09.09')
         data = {
-            'jobs':
-            [
-                {
-                    'name': 'coder',
-                    'employer': 'testCorp',
-                    'url': 'example.com/3',
-                    'date_posted': '2019-10-10'
-                }
-            ]
+            'example.com/3': {
+                'name': 'coder',
+                'employer': 'testCorp',
+                'url': 'example.com/3',
+                'date_posted': '2019-10-10'
+            }
         }
         self.assertEqual(Job.objects.count(), 1)
         client = APIClient()
@@ -271,21 +268,18 @@ class UpdateJobListViewTests(TestCase):
             url='example.com/3',
             date_posted='2019.09.09')
         data = {
-            'jobs':
-            [
-                {
-                    'name': 'tester',
-                    'employer': 'testCorp',
-                    'url': 'example.com/2',
-                    'date_posted': '2019-10-09'
-                },
-                {
-                    'name': 'coder',
-                    'employer': 'testCorp',
-                    'url': 'example.com/1',
-                    'date_posted': '2019-10-10'
-                }
-            ]
+            'example.com/2': {
+                'name': 'tester',
+                'employer': 'testCorp',
+                'url': 'example.com/2',
+                'date_posted': '2019-10-09'
+            },
+            'example.com/1': {
+                'name': 'coder',
+                'employer': 'testCorp',
+                'url': 'example.com/1',
+                'date_posted': '2019-10-10'
+            }
         }
         self.assertEqual(Job.objects.count(), 2)
         client = APIClient()
