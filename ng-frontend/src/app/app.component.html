@@ -8,9 +8,15 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-spinner *ngIf="!jobs" class="spinner"></mat-spinner>
-<div *ngIf="jobs">
-  <app-job-card *ngFor="let job of jobs"
-  (hideJob)="hideJob($event)" [job]="job"></app-job-card>
+<div *ngIf="jobs" class="container"
+fxLayout="row"
+fxLayoutAlign="space-around"
+fxLayoutGap="10px"
+fxLayoutGap.xs="0">
+  <div fxFlex="60%" fxFlex.xs="100%">
+    <app-job-card *ngFor="let job of jobs"
+    (hideJob)="hideJob($event)" [job]="job"></app-job-card>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
