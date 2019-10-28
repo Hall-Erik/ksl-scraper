@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>
       {{job.name}} | {{job.date_posted}} <mat-icon
-      color="accent" *ngIf="!job.seen">fiber_new</mat-icon>
+      color="accent" *ngIf="!job.seen && user">fiber_new</mat-icon>
     </mat-card-title>
     <mat-card-subtitle>{{job.employer}}</mat-card-subtitle>
   </mat-card-header>
@@ -10,7 +10,7 @@
     <a mat-stroked-button color="primary" target="_blank"
     (click)="onVisit()"
     href="https://jobs.ksl.com{{job.url}}">Visit</a>
-    <button mat-stroked-button
+    <button mat-stroked-button *ngIf="user"
     (click)="onHide()" color="warn">Hide</button>
   </mat-card-actions>
 </mat-card>
