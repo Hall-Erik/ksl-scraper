@@ -11,6 +11,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 
 const material = [
   MatSliderModule,
@@ -23,7 +24,8 @@ const material = [
   MatGridListModule,
   MatProgressSpinnerModule,
   MatBadgeModule,
-  MatIconModule
+  MatIconModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

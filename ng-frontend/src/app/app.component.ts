@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
@@ -22,7 +23,14 @@ export class AppComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private jobService: JobService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private snackBar: MatSnackBar) {}
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 3000
+    });
+  }
 
   ngOnInit() {    
     this.userService.user.subscribe(user => this.user = user);
@@ -37,6 +45,7 @@ export class AppComponent implements OnInit {
     this.jobService.hide_job(job_id.toString())
     .subscribe(() => {
       this.jobs = this.jobs.filter(j => j.id != job_id);
+      this.openSnackBar('Job hidden.');
     });
   }
 
@@ -49,6 +58,7 @@ export class AppComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.userService.get_user().subscribe(() => {
         this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
+        this.openSnackBar('Log in successful.');
       });
     });
   }
@@ -60,7 +70,7 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+      this.openSnackBar('Account created.');
     });
   }
 
@@ -69,6 +79,7 @@ export class AppComponent implements OnInit {
       () => {
         this.userService.user.next(null);
         this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+        this.openSnackBar('Logged out.');
       });
   }
 }
