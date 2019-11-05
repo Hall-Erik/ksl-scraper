@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
+    IsAdminUser,
     AllowAny)
 from rest_framework.authentication import (
     TokenAuthentication,
@@ -87,7 +88,7 @@ class MarkSeenView(APIView):
 
 
 class UpdateJobListView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     authentication_classes = (TokenAuthentication, SessionAuthentication)
 
     def post(self, request):

@@ -174,9 +174,17 @@ class UpdateJobListViewTests(TestCase):
         response = self.client.post(reverse('jobs:update-jobs'))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_user_can_add_jobs(self):
-        '''Logged in user can POST jobs'''
-        user = User.objects.create_user(
+    def test_normal_user_cannot_access(self):
+        '''Only admin users can access this endpoint'''
+        user = User.objects.create_user(username='test')
+        client = APIClient()
+        client.force_authenticate(user=user)
+        response = client.post(reverse('jobs:update-jobs'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_admin_user_can_add_jobs(self):
+        '''Logged in admin user can POST jobs'''
+        user = User.objects.create_superuser(
             username='test',
             email='test@example.com',
             password='test123')
@@ -202,9 +210,9 @@ class UpdateJobListViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Job.objects.count(), 2)
 
-    def test_user_can_update_jobs(self):
-        '''Logged in user can POST job updates'''
-        user = User.objects.create_user(
+    def test_admin_user_can_update_jobs(self):
+        '''Logged in admin user can POST job updates'''
+        user = User.objects.create_superuser(
             username='test',
             email='test@example.com',
             password='test123')
@@ -234,7 +242,7 @@ class UpdateJobListViewTests(TestCase):
 
     def test_old_jobs_get_deleted(self):
         '''Jobs missing from POST data are deleted'''
-        user = User.objects.create_user(
+        user = User.objects.create_superuser(
             username='test',
             email='test@example.com',
             password='test123')
@@ -253,7 +261,7 @@ class UpdateJobListViewTests(TestCase):
 
     def test_create_update_and_delete(self):
         '''Jobs can be created, updated, and deleted in on POST'''
-        user = User.objects.create_user(
+        user = User.objects.create_superuser(
             username='test',
             email='test@example.com',
             password='test123')
