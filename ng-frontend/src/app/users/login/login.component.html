@@ -1,4 +1,7 @@
 <h1 mat-dialog-title>Log In</h1>
+<mat-error *ngIf="loginForm.hasError('noUser')">
+  <small>Could not log in check your username and password and try again.</small>
+</mat-error>
 <form [formGroup]="loginForm">
   <div mat-dialog-content>
     <mat-form-field>

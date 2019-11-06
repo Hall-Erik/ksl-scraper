@@ -30,9 +30,7 @@ export class LoginComponent {
           this.password.value
         ).subscribe(() => {
           this.dialogRef.close();
-        }, (err) => {
-          console.log(err);
-        });
+        }, () => this.loginForm.setErrors({noUser: true}));
       }
     }
 
