@@ -22,6 +22,11 @@ export class RegisterComponent {
   get password1() { return this.registerForm.get('password1'); }
   get password2() { return this.registerForm.get('password2'); }
 
+  public usernameErrors: string[];
+  public emailErrors: string[];
+  public password1Errors: string[];
+  public password2Errors: string[];
+
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
     private fb: FormBuilder,
@@ -34,10 +39,34 @@ export class RegisterComponent {
           this.email.value,
           this.password1.value,
           this.password2.value).subscribe(() => {
-            this.dialogRef.close();
-          });
+            this.dialogRef.close(true);
+          }, (err) => {
+            if ('username' in err.error) {
+              this.username.setErrors({apiError: true});
+              this.usernameErrors = err.error.username;
+            }
+            if ('email' in err.error) {
+              this.email.setErrors({apiError: true});
+              this.emailErrors = err.error.email;
+            }
+            if ('password1' in err.error) {
+              this.password1.setErrors({apiError: true});
+              this.password1Errors = err.error.password1;
+            }
+            if ('password2' in err.error) {
+              this.password2.setErrors({apiError: true});
+              this.password2Errors = err.error.password2;
+            }
+            if ('non_field_errors' in err.error) {
+              if (err.error.non_field_errors[0] === "The two password fields didn't match.") {
+                this.password1.setErrors({matchError: true});
+                this.password2.setErrors({matchError: true});
+                this.registerForm.setErrors({matchError: true});
+              }
+            }
+        });
       }
     }
 
-    onNoClick(): void { this.dialogRef.close(); }
+    onNoClick(): void { this.dialogRef.close(false); }
 }

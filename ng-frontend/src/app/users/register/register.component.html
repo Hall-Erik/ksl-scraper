@@ -1,10 +1,16 @@
 <h1 mat-dialog-title>Register</h1>
+<mat-error *ngIf="registerForm.hasError('matchError')">
+  <small>Password and Confirm Password do not match.</small>
+</mat-error>
 <form [formGroup]="registerForm">
   <div mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field>      
       <input matInput
       placeholder="Username"
       formControlName="username" required>
+      <mat-error *ngIf="username.hasError('apiError')">
+        <div *ngFor="let err of usernameErrors">{{err}}</div>
+      </mat-error>
       <mat-error *ngIf="username.hasError('required')">
         Username is <strong>required</strong>
       </mat-error>
@@ -13,6 +19,9 @@
       <input matInput
       placeholder="Email"
       formControlName="email" required>
+      <mat-error *ngIf="email.hasError('apiError')">
+        <div *ngFor="let err of emailErrors">{{err}}</div>
+      </mat-error>
       <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
         Please enter a valid email address
       </mat-error>
@@ -26,6 +35,9 @@
       formControlName="password1"
       type="password"
       required>
+      <mat-error *ngIf="password1.hasError('apiError')">
+        <div *ngFor="let err of password1Errors">{{err}}</div>
+      </mat-error>
       <mat-error *ngIf="password1.hasError('required')">
         Password is <strong>required</strong>
       </mat-error>
@@ -36,6 +48,9 @@
       formControlName="password2"
       type="password"
       required>
+      <mat-error *ngIf="password2.hasError('apiError')">
+        <div *ngFor="let err of password2Errors">{{err}}</div>
+      </mat-error>
       <mat-error *ngIf="password2.hasError('required')">
         Confirm Password is <strong>required</strong>
       </mat-error>
@@ -44,6 +59,6 @@
   <div mat-dialog-actions>
     <button mat-button color="primary" (click)="onClick()"
     cdkFocusInitial>Register</button>
-    <button mat-button color="warn" (click)="onNoClick()">Cancel</button>
+    <button mat-button color="warn" [mat-dialog-close]="false">Cancel</button>
   </div>
   </form>

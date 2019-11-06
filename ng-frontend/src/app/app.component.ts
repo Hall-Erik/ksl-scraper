@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
 
   openLoginDialog(): void {
     const dialogRef = this.dialog.open(LoginComponent, {
-      width: '300px',
+      width: '310px',
       data: {}
     });
 
@@ -65,12 +65,12 @@ export class AppComponent implements OnInit {
 
   openRegisterDialog(): void {
     const dialogRef = this.dialog.open(RegisterComponent, {
-      width: '300px',
+      width: '310px',
       data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.openSnackBar('Account created.');
+      if (result) { this.openSnackBar('Account created.'); }
     });
   }
 
