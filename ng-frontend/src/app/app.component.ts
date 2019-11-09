@@ -6,7 +6,7 @@ import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
 
 import { JobService } from './services/job.service';
-import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 
 import { Job } from './models/job';
 import { User } from './models/user';
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private jobService: JobService,
-    private userService: UserService,
+    private authService: AuthService,
     private snackBar: MatSnackBar) {}
 
   openSnackBar(message: string) {
@@ -32,12 +32,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {    
-    this.userService.user.subscribe(user => this.user = user);
-    this.userService.get_user().subscribe(() => {
-      this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
-    }, () => {
-      this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+  ngOnInit() {
+    this.user = this.authService.currentUserValue;
+    this.authService.currentUser.subscribe((user) => {
+      this.user = user;
+      if (user != null) {
+        this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
+      } else {
+        this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
+      }
     });
   }
 
@@ -56,10 +59,9 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.userService.get_user().subscribe(() => {
-        this.jobService.get_jobs().subscribe(jobs => this.jobs = jobs);
+      if (this.user != null) {
         this.openSnackBar('Log in successful.');
-      });
+      }
     });
   }
 
@@ -69,17 +71,16 @@ export class AppComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) { this.openSnackBar('Account created.'); }
+    dialogRef.afterClosed().subscribe(() => {
+      if (this.user != null) {
+        this.openSnackBar('Account created.');
+      }
     });
   }
 
   logout(): void {
-    this.userService.logout().subscribe(
-      () => {
-        this.userService.user.next(null);
-        this.jobService.get_all_jobs().subscribe(jobs => this.jobs = jobs);
-        this.openSnackBar('Logged out.');
-      });
+    this.authService.logout().subscribe(
+      () => this.openSnackBar('Logged out.')
+    );
   }
 }

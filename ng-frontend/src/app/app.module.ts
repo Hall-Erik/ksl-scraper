@@ -12,7 +12,7 @@ import { MaterialModule } from './material/material.module';
 import { ApiInterceptor } from './services/api.interceptor';
 
 import { JobService } from './services/job.service';
-import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './users/login/login.component';
@@ -41,7 +41,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
   ],
   providers: [
     JobService,
-    UserService,
+    AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,

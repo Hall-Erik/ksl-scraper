@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { JobService } from '../../services/job.service';
 import { User } from '../../models/user';
 import { Job } from '../../models/job';
@@ -16,11 +16,11 @@ export class JobCardComponent implements OnInit {
   user: User;
 
   constructor(private jobService: JobService,
-              private userService: UserService) { }
+              private authService: AuthService) { }
 
   ngOnInit() {
-    this.user = this.userService.user.getValue();
-    this.userService.user.subscribe(user => this.user = user);
+    this.user = this.authService.currentUserValue;
+    this.authService.currentUser.subscribe(user => this.user = user);
   }
 
   onHide() { this.hideJob.emit(this.job.id); }

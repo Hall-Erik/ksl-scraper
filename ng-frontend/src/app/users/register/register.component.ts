@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -30,11 +30,11 @@ export class RegisterComponent {
   constructor(
     public dialogRef: MatDialogRef<RegisterComponent>,
     private fb: FormBuilder,
-    private userService: UserService) { }
+    private authService: AuthService) { }
 
     onClick(): void {
       if(this.registerForm.valid) {
-        this.userService.register(
+        this.authService.register(
           this.username.value,
           this.email.value,
           this.password1.value,

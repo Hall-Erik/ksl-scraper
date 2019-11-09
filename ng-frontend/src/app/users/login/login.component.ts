@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +21,11 @@ export class LoginComponent {
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
     private fb: FormBuilder,
-    private userService: UserService) { }
+    private authService: AuthService) { }
 
     onClick(): void {
       if(this.loginForm.valid) {
-        this.userService.login(
+        this.authService.login(
           this.username.value,
           this.password.value
         ).subscribe(() => {
