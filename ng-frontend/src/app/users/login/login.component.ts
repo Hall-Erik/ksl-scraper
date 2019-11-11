@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -21,18 +22,26 @@ export class LoginComponent {
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
     private fb: FormBuilder,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private snackBar: MatSnackBar) { }
 
-    onClick(): void {
-      if(this.loginForm.valid) {
-        this.authService.login(
-          this.username.value,
-          this.password.value
-        ).subscribe(() => {
-          this.dialogRef.close();
-        }, () => this.loginForm.setErrors({noUser: true}));
-      }
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 3000
+    });
+  }
+
+  onClick(): void {
+    if(this.loginForm.valid) {
+      this.authService.login(
+        this.username.value,
+        this.password.value
+      ).subscribe(() => {
+        this.openSnackBar('Log in successful.');
+        this.dialogRef.close();
+      }, () => this.loginForm.setErrors({noUser: true}));
     }
+  }
 
-    onNoClick(): void { this.dialogRef.close(); }
+  onNoClick(): void { this.dialogRef.close(); }
 }

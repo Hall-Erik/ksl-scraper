@@ -53,28 +53,20 @@ export class AppComponent implements OnInit {
   }
 
   openLoginDialog(): void {
-    const dialogRef = this.dialog.open(LoginComponent, {
+    this.dialog.open(LoginComponent, {
       width: '310px',
       data: {}
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      if (this.user != null) {
-        this.openSnackBar('Log in successful.');
-      }
     });
   }
 
   openRegisterDialog(): void {
-    const dialogRef = this.dialog.open(RegisterComponent, {
+    var registerDialog = this.dialog.open(RegisterComponent, {
       width: '310px',
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      if (this.user != null) {
-        this.openSnackBar('Account created.');
-      }
+    registerDialog.afterClosed().subscribe((val) => {
+      if (val) { this.openLoginDialog(); }
     });
   }
 
