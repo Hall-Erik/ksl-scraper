@@ -27,9 +27,7 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar) {}
 
   openSnackBar(message: string) {
-    this.snackBar.open(message, null, {
-      duration: 3000
-    });
+    this.snackBar.open(message, null, {duration: 3000});
   }
 
   ngOnInit() {
@@ -53,17 +51,11 @@ export class AppComponent implements OnInit {
   }
 
   openLoginDialog(): void {
-    this.dialog.open(LoginComponent, {
-      width: '310px',
-      data: {}
-    });
+    this.dialog.open(LoginComponent, {width: '310px'});
   }
 
   openRegisterDialog(): void {
-    var registerDialog = this.dialog.open(RegisterComponent, {
-      width: '310px',
-      data: {}
-    });
+    var registerDialog = this.dialog.open(RegisterComponent, {width: '310px'});
 
     registerDialog.afterClosed().subscribe((val) => {
       if (val) { this.openLoginDialog(); }

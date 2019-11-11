@@ -26,9 +26,7 @@ export class LoginComponent {
     private snackBar: MatSnackBar) { }
 
   openSnackBar(message: string) {
-    this.snackBar.open(message, null, {
-      duration: 3000
-    });
+    this.snackBar.open(message, null, {duration: 3000});
   }
 
   onClick(): void {
