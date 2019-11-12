@@ -13,7 +13,8 @@ def password_reset_token_created(
         'current_user': reset_password_token.user,
         'username': reset_password_token.user.username,
         'email': reset_password_token.user.email,
-        'reset_password_url': f'{domain}reset/{reset_password_token.key}'
+        'reset_password_url': f'{domain}/reset/{reset_password_token.key}',
+        'site_name': 'KSL Jobs'
     }
 
     email_html_message = render_to_string(
