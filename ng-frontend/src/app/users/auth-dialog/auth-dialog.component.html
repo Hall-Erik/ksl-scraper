@@ -1,0 +1,25 @@
+<span *ngIf="!forgot">
+  <app-login (close)="close($event)"></app-login>
+  <div class="forgot">
+    <button mat-icon-button color="primary"
+    (click)="forgot_pwd()"><small>Forgot your password?</small></button>
+  </div>
+</span>
+<span *ngIf="forgot && !sent">
+  <app-reset-request
+  (close)="close($event)"
+  (email_sent)="email_sent($event)"></app-reset-request>
+  <div class="forgot">
+    <button mat-icon-button color="primary"
+    (click)="remembered_pwd()"><small>Log in</small></button>
+  </div>
+</span>
+<span *ngIf="sent">
+  <h1 mat-dialog-title>Success!</h1>
+  <div>
+    An email has been sent with instructions for resetting your password.
+  </div>
+  <div>
+    <button mat-button color="primary" (click)="close()">Ok</button>
+  </div>
+</span>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { AuthDialogComponent } from './users/auth-dialog/auth-dialog.component';
 import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
 
@@ -51,7 +52,8 @@ export class AppComponent implements OnInit {
   }
 
   openLoginDialog(): void {
-    this.dialog.open(LoginComponent, {width: '310px'});
+    // this.dialog.open(LoginComponent, {width: '310px'});
+    this.dialog.open(AuthDialogComponent, {width: '310px'});
   }
 
   openRegisterDialog(): void {

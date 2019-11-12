@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,6 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  @Output() close: EventEmitter<any> = new EventEmitter();
+
   public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
@@ -20,10 +21,10 @@ export class LoginComponent {
   get password() { return this.loginForm.get('password'); }
 
   constructor(
-    public dialogRef: MatDialogRef<LoginComponent>,
     private fb: FormBuilder,
     private authService: AuthService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar
+  ) { }
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {duration: 3000});
@@ -36,10 +37,10 @@ export class LoginComponent {
         this.password.value
       ).subscribe(() => {
         this.openSnackBar('Log in successful.');
-        this.dialogRef.close();
+        this.close.emit(null);
       }, () => this.loginForm.setErrors({noUser: true}));
     }
   }
 
-  onNoClick(): void { this.dialogRef.close(); }
+  onNoClick(): void { this.close.emit(null); }
 }

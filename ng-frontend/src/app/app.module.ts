@@ -18,13 +18,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
 import { JobCardComponent } from './jobs/job-card/job-card.component';
+import { AuthDialogComponent } from './users/auth-dialog/auth-dialog.component';
+import { ResetRequestComponent } from './users/reset-request/reset-request.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    JobCardComponent
+    JobCardComponent,
+    AuthDialogComponent,
+    ResetRequestComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +54,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    AuthDialogComponent,
     LoginComponent,
     RegisterComponent
   ]
