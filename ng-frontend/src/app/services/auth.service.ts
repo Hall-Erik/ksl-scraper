@@ -65,4 +65,15 @@ export class AuthService {
     this.currentUserSubj.next(null);
     return this.http.post('/api/auth/logout/', {});
   }
+
+  public request_reset(email: string): Observable<any> {
+    return this.http.post('/api/auth/password/reset/', {email: email});
+  }
+
+  public reset_password(token: string, password: string): Observable<any> {
+    return this.http.post('/api/auth/password/reset/confirm/', {
+      token: token,
+      password: password
+    });
+  }
 }
