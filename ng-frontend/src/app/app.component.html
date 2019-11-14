@@ -8,4 +8,11 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<div fxLayout="row"
+fxLayoutAlign="center"
+fxLayoutGap="10px"
+fxLayoutGap.xs="0">
+  <div fxFlex="60%" fxFlex.xs="100%">
+    <router-outlet></router-outlet>
+  </div>
+</div>

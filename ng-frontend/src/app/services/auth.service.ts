@@ -70,6 +70,12 @@ export class AuthService {
     return this.http.post('/api/auth/password/reset/', {email: email});
   }
 
+  public validate_token(token: string) {
+    return this.http.post('/api/auth/password/reset/validate_token/', {
+      token: token
+    });
+  }
+
   public reset_password(token: string, password: string): Observable<any> {
     return this.http.post('/api/auth/password/reset/confirm/', {
       token: token,

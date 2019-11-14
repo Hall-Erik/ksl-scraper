@@ -1,5 +1,5 @@
 <span *ngIf="!forgot">
-  <app-login (close)="close($event)"></app-login>
+  <app-login (close)="close()"></app-login>
   <div class="forgot">
     <button mat-icon-button color="primary"
     (click)="forgot_pwd()"><small>Forgot your password?</small></button>
@@ -7,8 +7,8 @@
 </span>
 <span *ngIf="forgot && !sent">
   <app-reset-request
-  (close)="close($event)"
-  (email_sent)="email_sent($event)"></app-reset-request>
+  (close)="close()"
+  (email_sent)="email_sent()"></app-reset-request>
   <div class="forgot">
     <button mat-icon-button color="primary"
     (click)="remembered_pwd()"><small>Log in</small></button>
