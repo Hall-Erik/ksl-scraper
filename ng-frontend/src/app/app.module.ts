@@ -21,6 +21,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
 import { AuthDialogComponent } from './users/auth-dialog/auth-dialog.component';
 import { ResetRequestComponent } from './users/reset-request/reset-request.component';
 import { HomeComponent } from './home/home.component';
+import { ResetPasswordComponent } from './users/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { HomeComponent } from './home/home.component';
     JobCardComponent,
     AuthDialogComponent,
     ResetRequestComponent,
-    HomeComponent
+    HomeComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
