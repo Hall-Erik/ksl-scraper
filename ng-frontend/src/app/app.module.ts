@@ -20,6 +20,7 @@ import { RegisterComponent } from './users/register/register.component';
 import { JobCardComponent } from './jobs/job-card/job-card.component';
 import { AuthDialogComponent } from './users/auth-dialog/auth-dialog.component';
 import { ResetRequestComponent } from './users/reset-request/reset-request.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ResetRequestComponent } from './users/reset-request/reset-request.compo
     RegisterComponent,
     JobCardComponent,
     AuthDialogComponent,
-    ResetRequestComponent
+    ResetRequestComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
