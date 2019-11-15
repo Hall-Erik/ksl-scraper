@@ -1,5 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from "@angular/router";
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../services/auth.service';
@@ -10,9 +11,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./reset-request.component.css']
 })
 export class ResetRequestComponent {
-  @Output() close: EventEmitter<any> = new EventEmitter();
-  @Output() email_sent: EventEmitter<any> = new EventEmitter();
-
   public resetForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]]
   });
@@ -22,7 +20,8 @@ export class ResetRequestComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   openSnackBar(message: string) {
@@ -32,9 +31,10 @@ export class ResetRequestComponent {
   onClick(): void {
     if(this.resetForm.valid) {
       this.authService.request_reset(this.email.value)
-      .subscribe(() => this.email_sent.emit(null))
+      .subscribe(() => {
+        this.openSnackBar('Request sent. Check your email for instructions.');
+        this.router.navigate(['/']);
+      });
     }
   }
-
-  onNoClick(): void { this.close.emit(null); }
 }
