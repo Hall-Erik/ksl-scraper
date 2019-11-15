@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -23,7 +24,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     public dialogRef: MatDialogRef<LoginComponent>,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   openSnackBar(message: string) {
@@ -38,6 +40,7 @@ export class LoginComponent {
       ).subscribe(() => {
         this.openSnackBar('Log in successful.');
         this.dialogRef.close();
+        this.router.navigate(['/']);
       }, () => this.loginForm.setErrors({noUser: true}));
     }
   }

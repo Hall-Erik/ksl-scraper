@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -32,7 +33,9 @@ export class RegisterComponent {
     public dialogRef: MatDialogRef<RegisterComponent>,
     private fb: FormBuilder,
     private authService: AuthService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) { }
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {duration: 3000});
@@ -48,6 +51,7 @@ export class RegisterComponent {
       ).subscribe(() => {
         this.openSnackBar('Account created.');
         this.dialogRef.close();
+        this.router.navigate(['/']);
       }, (err) => {
         if ('username' in err.error) {
           this.username.setErrors({apiError: true});
