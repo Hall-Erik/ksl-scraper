@@ -18,7 +18,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './users/login/login.component';
 import { RegisterComponent } from './users/register/register.component';
 import { JobCardComponent } from './jobs/job-card/job-card.component';
-import { AuthDialogComponent } from './users/auth-dialog/auth-dialog.component';
 import { ResetRequestComponent } from './users/reset-request/reset-request.component';
 import { HomeComponent } from './home/home.component';
 import { ResetPasswordComponent } from './users/reset-password/reset-password.component';
@@ -29,7 +28,6 @@ import { ResetPasswordComponent } from './users/reset-password/reset-password.co
     LoginComponent,
     RegisterComponent,
     JobCardComponent,
-    AuthDialogComponent,
     ResetRequestComponent,
     HomeComponent,
     ResetPasswordComponent
@@ -58,7 +56,6 @@ import { ResetPasswordComponent } from './users/reset-password/reset-password.co
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    AuthDialogComponent,
     LoginComponent,
     RegisterComponent
   ]

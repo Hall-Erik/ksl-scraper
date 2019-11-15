@@ -47,7 +47,7 @@ export class RegisterComponent {
         this.password2.value
       ).subscribe(() => {
         this.openSnackBar('Account created.');
-        this.dialogRef.close(false);
+        this.dialogRef.close();
       }, (err) => {
         if ('username' in err.error) {
           this.username.setErrors({apiError: true});
@@ -76,7 +76,5 @@ export class RegisterComponent {
     }
   }
 
-  onNoClick(): void { this.dialogRef.close(false); }
-
-  logIn() { this.dialogRef.close(true); }
+  onNoClick(): void { this.dialogRef.close(); }
 }
