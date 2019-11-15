@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material/material.module';
 
 import { ApiInterceptor } from './services/api.interceptor';
+import { NonUserRouteGuard } from './services/non-user-route.guard';
 
 import { JobService } from './services/job.service';
 import { AuthService } from './services/auth.service';
@@ -48,6 +49,7 @@ import { ResetPasswordComponent } from './users/reset-password/reset-password.co
   providers: [
     JobService,
     AuthService,
+    NonUserRouteGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
